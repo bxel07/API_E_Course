@@ -2,18 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\FormUpdateUserRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
 class UserController extends Controller
 {
-    protected function updateImage(string $field, $dataUser)
+    protected function storeImage(string $field, $dataUser)
     {
         if ($dataUser[$field]) {
             $nameFile = explode('/', $dataUser[$field]);
@@ -26,7 +22,7 @@ class UserController extends Controller
         return $url;
     }
 
-    public function update(Request $request)
+    public function updateProfile(Request $request)
     {
         $id = request()->user()->id;
         $rules = [
@@ -52,16 +48,16 @@ class UserController extends Controller
         $dataUser = User::find($id);
 
         if ($request->file('ktp')) {
-            $data['ktp'] = $this->updateImage('ktp', $dataUser);
+            $data['ktp'] = $this->storeImage('ktp', $dataUser);
         }
         if ($request->file('cv')) {
-            $data['cv'] = $this->updateImage('cv', $dataUser);
+            $data['cv'] = $this->storeImage('cv', $dataUser);
         }
         if ($request->file('ijazah')) {
-            $data['ijazah'] = $this->updateImage('ijazah', $dataUser);
+            $data['ijazah'] = $this->storeImage('ijazah', $dataUser);
         }
         if ($request->file('avatar')) {
-            $data['avatar'] = $this->updateImage('avatar', $dataUser);
+            $data['avatar'] = $this->storeImage('avatar', $dataUser);
         }
 
         User::where('id', $id)
